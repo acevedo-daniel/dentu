@@ -5,5 +5,8 @@ packages/**/dist/
 # Ignorar configuraciones ESM/otras no necesarias para formato
 eslint.config.js
 
+# Ignorar package.json para evitar errores con ESM
+package.json
+
 # Otros
 .DS_Store
