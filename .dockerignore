@@ -1,0 +1,33 @@
+
+# Ignora dependencias instaladas en cualquier paquete del monorepo
+node_modules
+*/node_modules
+packages/*/node_modules
+
+# Ignora carpetas de builds y cobertura para evitar archivos innecesarios en la imagen
+dist
+*/dist
+packages/*/dist
+coverage
+*/coverage
+packages/*/coverage
+
+# Ignora archivos de logs generados por npm/yarn/pnpm y cualquier log
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# Ignora configuraciones locales de IDEs y sistemas operativos
+.DS_Store
+.vscode/
+.idea/
+
+# Ignora carpetas de git y CI/CD para evitar subir metadatos y workflows
+.git
+.github/
+
+# Ignora archivos de variables de entorno para seguridad
+.env
+.env.local
+.env.*.local

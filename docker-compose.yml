@@ -1,0 +1,76 @@
+services:
+  # ================================================================
+  # API Development Service
+  # ================================================================
+  api-dev:
+    build:
+      context: . # Contexto raíz del monorepo
+      dockerfile: packages/api/Dockerfile # Dockerfile específico del paquete API
+      target: builder # Usar stage con dependencias de desarrollo para hot reload
+    container_name: dentu-api-dev
+    ports:
+      - '3000:3000' # Mapea el puerto 3000 del contenedor al host
+    volumes:
+      - ./packages/api:/usr/src/app/packages/api # Hot reload del código de la API
+      - ./packages/api/prisma:/usr/src/app/packages/api/prisma # Hot reload del esquema Prisma
+      # No se monta node_modules para evitar conflictos de dependencias
+    command: npm run dev -w @dentu/api # Comando de desarrollo para la API
+    env_file:
+      - ./.env # Variables de entorno para configuración
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=${DATABASE_URL}
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"fetch('http://localhost:3000/').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))\""]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped # Reinicia el contenedor si se detiene
+
+  # ================================================================
+  # PostgreSQL Database Service
+  # ================================================================
+  postgres:
+    image: postgres:17.6-alpine
+    container_name: dentu-postgres
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_DB=dentu_db
+      - POSTGRES_USER=dentu_user
+      - POSTGRES_PASSWORD=dentu_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/init:/docker-entrypoint-initdb.d/
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dentu_user -d dentu_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # ================================================================
+  # Redis Cache Service (opcional)
+  # ================================================================
+  redis:
+    image: redis:7-alpine
+    container_name: dentu-redis
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+# ================================================================
+# Volumes para persistencia de datos
+# ================================================================
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local

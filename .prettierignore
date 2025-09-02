@@ -1,0 +1,9 @@
+# Ignorar dependencias y builds
+node_modules/
+packages/**/dist/
+
+# Ignorar configuraciones ESM/otras no necesarias para formato
+eslint.config.js
+
+# Otros
+.DS_Store
