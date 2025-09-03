@@ -28,6 +28,36 @@ services:
     restart: unless-stopped # Reinicia el contenedor si se detiene
 
   # ================================================================
+  # Web Development Service
+  # ================================================================
+  web-dev:
+    build:
+      context: . # Contexto raíz del monorepo
+      dockerfile: packages/web/Dockerfile # Dockerfile específico del paquete Web
+      target: builder # Usar stage con dependencias de desarrollo para hot reload
+    container_name: dentu-web-dev
+    ports:
+      - '3001:3001' # Mapea el puerto 3001 del contenedor al host
+    volumes:
+      - ./packages/web:/usr/src/app/packages/web # Hot reload del código del Web
+      - ./packages/web/public:/usr/src/app/packages/web/public # Hot reload de archivos públicos
+      # No se monta node_modules para evitar conflictos de dependencias
+    command: npm run dev -w @dentu/web # Comando de desarrollo para el Web
+    env_file:
+      - ./.env # Variables de entorno para configuración
+    environment:
+      - NODE_ENV=development
+      - PORT=3001
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"fetch('http://localhost:3001/').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))\""]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped # Reinicia el contenedor si se detiene
+    depends_on:
+      - api-dev # El web depende de la API
+
+  # ================================================================
   # PostgreSQL Database Service
   # ================================================================
   postgres:

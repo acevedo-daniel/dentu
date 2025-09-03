@@ -8,7 +8,14 @@ import eslintConfigPrettier from 'eslint-config-prettier';
 export default tseslint.config(
   // Ignora los directorios globalmente
   {
-    ignores: ['node_modules/', 'dist/', 'build/'],
+    ignores: [
+      'node_modules/',
+      'dist/',
+      'build/',
+      '**/*.json',
+      '**/*.css',
+      '**/.next/*',
+    ],
   },
 
   // Configuración base recomendada por ESLint

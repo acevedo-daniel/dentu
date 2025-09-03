@@ -85,12 +85,14 @@ dentu-develop/
 ## ⚙️ Requisitos Previos
 
 ### **Software Requerido:**
+
 - **Node.js** 18.x o superior
 - **npm** 9.x o superior
 - **Docker Desktop** 4.x o superior
 - **Git** 2.x o superior
 
 ### **Requisitos del Sistema:**
+
 - **RAM**: Mínimo 8GB (recomendado 16GB)
 - **Almacenamiento**: 10GB de espacio libre
 - **Sistema Operativo**: Windows 10+, macOS 10.15+, Ubuntu 20.04+
@@ -98,18 +100,22 @@ dentu-develop/
 ## 🛠️ Instalación
 
 ### **1. Clonar el Repositorio**
+
 ```bash
 git clone https://github.com/acevedo-daniel/dentu.git
 cd dentu-develop
 ```
 
 ### **2. Instalar Dependencias**
+
 ```bash
 npm install
 ```
 
 ### **3. Configurar Variables de Entorno**
+
 Crear archivo `.env` en la raíz del proyecto:
+
 ```bash
 # Base de datos
 DATABASE_URL="postgresql://dentu_user:dentu_password@postgres:5432/dentu_db?schema=public"
@@ -132,6 +138,7 @@ LOG_LEVEL="info"
 ```
 
 ### **4. Generar Cliente Prisma**
+
 ```bash
 npx prisma generate --schema=packages/api/prisma/schema.prisma
 ```
@@ -139,6 +146,7 @@ npx prisma generate --schema=packages/api/prisma/schema.prisma
 ## 🐳 Docker
 
 ### **Levantar Servicios Completos**
+
 ```bash
 # Desarrollo con hot reload
 docker-compose up --build
@@ -148,13 +156,15 @@ docker-compose up -d --build
 ```
 
 ### **Servicios Disponibles**
-| Servicio | Puerto | Descripción |
-|----------|--------|-------------|
-| **API** | 3000 | Backend principal con hot reload |
-| **PostgreSQL** | 5432 | Base de datos principal |
-| **Redis** | 6379 | Cache y sesiones |
+
+| Servicio       | Puerto | Descripción                      |
+| -------------- | ------ | -------------------------------- |
+| **API**        | 3000   | Backend principal con hot reload |
+| **PostgreSQL** | 5432   | Base de datos principal          |
+| **Redis**      | 6379   | Cache y sesiones                 |
 
 ### **Comandos Docker Útiles**
+
 ```bash
 # Ver logs en tiempo real
 docker-compose logs -f api-dev
@@ -175,6 +185,7 @@ docker-compose down -v
 ## 🔧 Desarrollo
 
 ### **Scripts Disponibles**
+
 ```bash
 # Desarrollo local (sin Docker)
 npm run dev:api
@@ -190,6 +201,7 @@ npm run format
 ```
 
 ### **Estructura de la API**
+
 ```typescript
 // packages/api/src/index.ts
 import express from 'express';
@@ -210,7 +222,9 @@ app.listen(port, () => {
 ```
 
 ### **Hot Reload con tsx**
+
 El proyecto usa `tsx` para desarrollo con recarga automática:
+
 - **Compilación instantánea** de TypeScript
 - **Recarga automática** al cambiar archivos
 - **Logs formateados** con pino-pretty
@@ -218,12 +232,14 @@ El proyecto usa `tsx` para desarrollo con recarga automática:
 ## 📊 Base de Datos
 
 ### **PostgreSQL 17.6**
+
 - **Motor**: PostgreSQL con Alpine Linux
 - **Persistencia**: Volúmenes Docker
 - **Migraciones**: Automáticas al levantar Docker
 - **Backup**: Configurado con volúmenes persistentes
 
 ### **Prisma ORM**
+
 ```prisma
 // packages/api/prisma/schema.prisma
 model User {
@@ -238,6 +254,7 @@ model User {
 ```
 
 ### **Migraciones**
+
 ```bash
 # Crear nueva migración
 npx prisma migrate dev --name nombre_migracion --schema=packages/api/prisma/schema.prisma
@@ -250,6 +267,7 @@ npx prisma migrate reset --schema=packages/api/prisma/schema.prisma
 ```
 
 ### **Redis Cache**
+
 - **Versión**: 7.4.5 Alpine
 - **Persistencia**: Volúmenes Docker
 - **Uso**: Cache, sesiones, colas de trabajo
@@ -257,6 +275,7 @@ npx prisma migrate reset --schema=packages/api/prisma/schema.prisma
 ## 🧪 Testing
 
 ### **Framework de Testing**
+
 ```bash
 # Ejecutar tests
 npm test
@@ -269,6 +288,7 @@ npm run test:coverage
 ```
 
 ### **Configuración de Tests**
+
 - **Jest** como framework principal
 - **ts-jest** para TypeScript
 - **Supertest** para testing de API
@@ -277,11 +297,13 @@ npm run test:coverage
 ## 📦 Despliegue
 
 ### **Entornos Disponibles**
+
 - **Development**: `docker-compose up --build`
 - **Staging**: `docker-compose -f docker-compose.staging.yml up -d`
 - **Production**: `docker-compose -f docker-compose.prod.yml up -d`
 
 ### **Variables de Entorno por Entorno**
+
 ```bash
 # Development
 NODE_ENV=development
@@ -294,6 +316,7 @@ JWT_SECRET=${JWT_SECRET}
 ```
 
 ### **Docker en Producción**
+
 ```bash
 # Build de imagen de producción
 docker build -f packages/api/Dockerfile -t dentu-api:latest .
@@ -305,6 +328,7 @@ docker run -d -p 3000:3000 --env-file .env.prod dentu-api:latest
 ## 🤝 Contribución
 
 ### **Flujo de Trabajo**
+
 1. **Fork** del repositorio
 2. **Crear** rama para feature (`git checkout -b feature/nueva-funcionalidad`)
 3. **Commit** de cambios (`git commit -am 'Agregar nueva funcionalidad'`)
@@ -312,12 +336,14 @@ docker run -d -p 3000:3000 --env-file .env.prod dentu-api:latest
 5. **Crear** Pull Request
 
 ### **Estándares de Código**
+
 - **ESLint** para linting
 - **Prettier** para formateo
 - **TypeScript** estricto
 - **Conventional Commits** para mensajes
 
 ### **Pre-commit Hooks**
+
 ```bash
 # Configurado con Husky
 npm run prepare
@@ -337,6 +363,7 @@ Este proyecto está bajo la Licencia ISC. Ver el archivo [LICENSE](LICENSE) para
 ### **Problemas Comunes**
 
 #### **Docker no inicia**
+
 ```bash
 # Verificar que Docker Desktop esté ejecutándose
 docker --version
@@ -344,6 +371,7 @@ docker ps
 ```
 
 #### **Puerto ya en uso**
+
 ```bash
 # Cambiar puerto en docker-compose.yml
 ports:
@@ -351,6 +379,7 @@ ports:
 ```
 
 #### **Base de datos no conecta**
+
 ```bash
 # Verificar variables de entorno
 cat .env
@@ -361,12 +390,14 @@ docker-compose up --build
 ```
 
 ### **Recursos Adicionales**
+
 - [📚 Documentación de Prisma](https://www.prisma.io/docs/)
 - [🐳 Docker Documentation](https://docs.docker.com/)
 - [📖 TypeScript Handbook](https://www.typescriptlang.org/docs/)
 - [🔗 Express.js Guide](https://expressjs.com/en/guide/routing.html)
 
 ### **Contacto**
+
 - **GitHub**: [@acevedo-daniel](https://github.com/acevedo-daniel)
 - **Issues**: [Reportar Bug](https://github.com/acevedo-daniel/dentu/issues)
 - **Discussions**: [Discutir Ideas](https://github.com/acevedo-daniel/dentu/discussions)
@@ -375,4 +406,4 @@ docker-compose up --build
 
 **¡Gracias por usar Dentu! 🦷✨**
 
-*Desarrollado con ❤️ por el equipo de Dentu*
+_Desarrollado con ❤️ por el equipo de Dentu_
